@@ -16,7 +16,14 @@ case ${argv[0]} in
     ;;
 esac
 
-VERSION="7.1.0"
+: ${BSDTAR=bsdtar}
+: ${DEBIAN_VERSION="7.1.0"}
+# Be sure to specify a mirror site that carries CD images
+# see http://www.debian.org/CD/http-ftp/#mirrors for the list.
+: ${DEBIAN_MIRROR="debian.osuosl.org"}
+: ${DISK_SIZE=8192}
+
+VERSION="$DEBIAN_VERSION"
 BOX="debian-${VERSION}-${ARCH}"
 
 VBOX_APPLICATION="/Applications/VirtualBox.app"
@@ -27,8 +34,7 @@ FOLDER_ISO="${FOLDER_BASE}/iso"
 FOLDER_BUILD="${FOLDER_BASE}/build"
 FOLDER_VBOX="${FOLDER_BUILD}/vbox"
 
-DEBIAN_MIRROR="ftp.acc.umu.se"
-DEBIAN_URL="http://${DEBIAN_MIRROR}/debian-cd/${VERSION}/${ARCH}/iso-cd"
+DEBIAN_URL="http://${DEBIAN_MIRROR}/debian-cdimage/${VERSION}/${ARCH}/iso-cd"
 DEBIAN_ISO_NAME="debian-${VERSION}-${ARCH}-netinst.iso"
 DEBIAN_ISO_URL="${DEBIAN_URL}/${DEBIAN_ISO_NAME}"
 DEBIAN_ISO_FILE="${FOLDER_ISO}/${DEBIAN_ISO_NAME}"
@@ -84,7 +90,7 @@ else
 fi
 
 info "Unpacking ${DEBIAN_ISO_NAME}..."
-/usr/local/opt/libarchive/bin/bsdtar -xf "${DEBIAN_ISO_FILE}" -C "${FOLDER_BUILD}/custom"
+$BSDTAR -xf "${DEBIAN_ISO_FILE}" -C "${FOLDER_BUILD}/custom"
 
 info "Grant write permission..."
 chmod -R u+w "${FOLDER_BUILD}/custom"
@@ -125,7 +131,7 @@ VBoxManage storagectl "${BOX}" --name "IDE Controller" --add ide \
 VBoxManage storagectl "${BOX}" --name "SATA Controller" --add sata \
     --controller IntelAhci --sataportcount 1 --hostiocache off
     
-VBoxManage createhd --filename "${FOLDER_VBOX}/${BOX}/${BOX}.vdi" --size 40960
+VBoxManage createhd --filename "${FOLDER_VBOX}/${BOX}/${BOX}.vdi" --size $DISK_SIZE
     
 VBoxManage storageattach "${BOX}" --storagectl "SATA Controller" --port 0 \
     --device 0 --type hdd --medium "${FOLDER_VBOX}/${BOX}/${BOX}.vdi"
