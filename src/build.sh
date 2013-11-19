@@ -17,7 +17,7 @@ case ${argv[0]} in
 esac
 
 : ${BSDTAR=bsdtar}
-: ${DEBIAN_VERSION="7.1.0"}
+: ${DEBIAN_VERSION="7.2.0"}
 # Be sure to specify a mirror site that carries CD images
 # see http://www.debian.org/CD/http-ftp/#mirrors for the list.
 : ${DEBIAN_MIRROR="debian.osuosl.org"}
