@@ -10,6 +10,26 @@ Dependencies: **VirtualBox, cdrtools, vagrant**
 
     brew install libarchive
 
+Mike's Notes
+------------
+
+Forked off https://github.com/tiwilliam/vagrant-debian
+
+Changes:
+
+- Removed Chef
+- The Debian ISO mirror can be overriden by an environment
+  variable (DEBIAN\_MIRROR).
+- The Debian version can be overriden by an environment
+  variable (DEBIAN\_VERSION).
+- The disk size defaults to 8 Gbytes but can be overridden by an
+  environment variable (DISK\_SIZE).
+- The path to the bsdtar program can be overridden by an environment variable (BSDTAR)
+- The installed sources.list now uses the US Debian mirror.
+- Added python-dev, python-setuptools, and tmux to the set of default packages.
+- Removed puppet and screen from the set of default packages.
+
+
 William's notes
 ---------------
 
