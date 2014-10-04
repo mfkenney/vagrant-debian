@@ -17,13 +17,14 @@ case ${argv[0]} in
 esac
 
 : ${BSDTAR=bsdtar}
-: ${DEBIAN_VERSION="7.2.0"}
+: ${DEBIAN_VERSION="7.6.0"}
 # Be sure to specify a mirror site that carries CD images
 # see http://www.debian.org/CD/http-ftp/#mirrors for the list.
 : ${DEBIAN_MIRROR="debian.osuosl.org"}
 : ${DISK_SIZE=8192}
 
 VERSION="$DEBIAN_VERSION"
+#BOX="debian-mini-${VERSION}-${ARCH}"
 BOX="debian-${VERSION}-${ARCH}"
 
 VBOX_APPLICATION="/Applications/VirtualBox.app"
@@ -129,7 +130,7 @@ VBoxManage storagectl "${BOX}" --name "IDE Controller" --add ide \
     --controller PIIX4 --hostiocache on
 
 VBoxManage storagectl "${BOX}" --name "SATA Controller" --add sata \
-    --controller IntelAhci --sataportcount 1 --hostiocache off
+    --controller IntelAhci --portcount 1 --hostiocache off
     
 VBoxManage createhd --filename "${FOLDER_VBOX}/${BOX}/${BOX}.vdi" --size $DISK_SIZE
     
