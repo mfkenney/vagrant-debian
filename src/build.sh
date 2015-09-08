@@ -6,9 +6,11 @@ argc=$#
 case ${argv[0]} in
     64)
         ARCH="amd64"
+        OSTYPE="Debian_64"
     ;;
     32)
         ARCH="i386"
+        OSTYPE="Debian"
     ;;
     *)
         echo "usage: $0 <32|64>"
@@ -17,7 +19,7 @@ case ${argv[0]} in
 esac
 
 : ${BSDTAR=bsdtar}
-: ${DEBIAN_VERSION="7.6.0"}
+: ${DEBIAN_VERSION="8.1.0"}
 # Be sure to specify a mirror site that carries CD images
 # see http://www.debian.org/CD/http-ftp/#mirrors for the list.
 : ${DEBIAN_MIRROR="debian.osuosl.org"}
@@ -121,10 +123,10 @@ mkisofs -r -V "Custom Debian Install CD" -cache-inodes -quiet -J -l \
     "${FOLDER_BUILD}/custom"
 
 info "Creating VM..."
-VBoxManage createvm --name "${BOX}" --ostype Debian --register --basefolder "${FOLDER_VBOX}"
+VBoxManage createvm --name "${BOX}" --ostype ${OSTYPE} --register --basefolder "${FOLDER_VBOX}"
     
-VBoxManage modifyvm "${BOX}" --memory 360 --boot1 dvd --boot2 disk \
-    --boot3 none --boot4 none --vram 12 --pae off --rtcuseutc on
+VBoxManage modifyvm "${BOX}" --memory 360 --boot1 dvd --boot2 disk --hwvirtex on --acpi on\
+    --boot3 none --boot4 none --vram 12 --pae on --rtcuseutc on
     
 VBoxManage storagectl "${BOX}" --name "IDE Controller" --add ide \
     --controller PIIX4 --hostiocache on
